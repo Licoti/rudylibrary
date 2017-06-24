@@ -1,0 +1,29 @@
+.debug {border: 1px solid red}
+
+.r_navigation {
+	width: 42%;
+	max-width: 520px;
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	color: #fff;
+	box-sizing: border-box;
+	background-color: #191919;
+	overflow-y: auto;
+	overflow-x: hidden;
+	z-index: 5556;
+
+	-webkit-transform: translate(-100%);
+	transform: translate(-100%);
+
+	-webkit-transition: all 1s cubic-bezier(0.75, 0.05, 0.2, 1);
+	transition: all 1s cubic-bezier(0.75, 0.05, 0.2, 1);
+}
+	.r_navigation.active {
+		-webkit-transition: all 0.3s ease-out;
+		transition: all 0.3s ease-out;
+		-webkit-transform: translate(0);
+		transform: translate(0);
+	}
