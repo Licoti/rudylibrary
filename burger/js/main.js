@@ -1,33 +1,38 @@
 var r_burgerMenuGlobal = {
   init: function () {
-    this.debug();
-    this.cloneMenu();
-    this.openCloseMenu();
-  },
-  debug: function (){
-    console.log('Hello !')
-  },
-  openCloseMenu: function () {
-    var self = this;
-
-    self.config ={
+    this.config ={
       _buttonMenu: document.querySelectorAll('.r_navigation__title--burger'),
       _contentMenu: document.querySelectorAll('.r_cloned-navigation')
     };
 
-    [].forEach.call(self.config._buttonMenu, function(el) {
+    this.cloneMenu();
+    this.openCloseMenu();
+    this.debug();
+  },
+
+  debug: function (){
+    console.log('Hello !');
+  },
+
+  openCloseMenu: function () {
+    [].forEach.call(document.querySelectorAll('.r_navigation__title--burger'), function(el) {
       el.addEventListener('click', function() {
-          [].map.call(self.config._contentMenu, function(element) {
+        console.log('clicked');
+
+          [].map.call(r_burgerMenuGlobal.config._contentMenu, function(element) {
               element.classList.toggle("active");
           });
       });
     });
   },
-  cloneMenu: function () {
-    var el = document.querySelector('.r_main-navigation');
-    var clonedElement = el.cloneNode(true);
 
-    document.querySelector('.r_cloned-navigation').appendChild(clonedElement);
+  cloneMenu: function () {
+    var el = document.querySelector('.r_main-navigation'),
+        clonedElement = el.cloneNode(true);
+
+    if (r_burgerMenuGlobal.config._contentMenu.length) {
+      document.querySelector('.r_cloned-navigation').appendChild(clonedElement);
+    }
   }
 };
 
