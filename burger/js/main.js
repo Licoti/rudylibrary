@@ -1,12 +1,14 @@
 var r_burgerMenuGlobal = {
   init: function () {
     this.config ={
-      _buttonMenu: document.querySelectorAll('.r_navigation__title--burger'),
-      _contentMenu: document.querySelectorAll('.r_cloned-navigation')
+      _buttonMenu: '.r_navigation__title--burger',
+      _contentMenu: '.r_main-navigation',
+      _contentMenuCloned: '.r_cloned-navigation',
     };
 
     this.cloneMenu();
-    this.openCloseMenu();
+    this.toggleMenu();
+    this.outsideMenu();
     this.debug();
   },
 
@@ -14,26 +16,36 @@ var r_burgerMenuGlobal = {
     console.log('Hello !');
   },
 
-  openCloseMenu: function () {
-    [].forEach.call(document.querySelectorAll('.r_navigation__title--burger'), function(el) {
+  toggleMenu: function () {
+    [].forEach.call(document.querySelectorAll(this.config._buttonMenu), function(el) {
       el.addEventListener('click', function() {
-        console.log('clicked');
-
-          [].map.call(r_burgerMenuGlobal.config._contentMenu, function(element) {
-              element.classList.toggle("active");
-          });
+        [].map.call(document.querySelectorAll(r_burgerMenuGlobal.config._contentMenuCloned), function(element) {
+            element.classList.toggle("active");
+        });
       });
     });
   },
 
-  cloneMenu: function () {
-    var el = document.querySelector('.r_main-navigation'),
-        clonedElement = el.cloneNode(true);
+  outsideMenu: function () {
+    window.addEventListener('click', function(e){
+      if (!document.getElementById('cloned-menu').contains(e.target)){
+        if (document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).classList.contains('active')) {
+          alert("Clicked in Box");
+          document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).classList.remove('active');
+        }
+      }
+    });
+  },
 
-    if (r_burgerMenuGlobal.config._contentMenu.length) {
-      document.querySelector('.r_cloned-navigation').appendChild(clonedElement);
+  cloneMenu: function () {
+    var el = document.querySelector(this.config._contentMenu),
+      clonedElement = el.cloneNode(true);
+    if (document.querySelector(this.config._contentMenuCloned)) {
+      document.querySelector(this.config._contentMenuCloned).appendChild(clonedElement);
     }
   }
 };
 
-r_burgerMenuGlobal.init();
+(function() {
+  r_burgerMenuGlobal.init();
+}());
