@@ -5,21 +5,22 @@ var r_burgerMenuGlobal = {
       CSS:{
         classes:{
           opened:'opened',
-          active: 'active'
+          active: 'active',
+          btOverlay: 'bt-overlay',
         },
         ids:{
           container:'maincontainer'
         }
       },
-      _buttonMenu: '.r_navigation__title--burger',
+      _buttonBurgerMenu: '.r_navigation__title--burger',
       _contentMenu: '.r_main-navigation',
       _contentMenuCloned: '.r_cloned-navigation',
-        isOpen: false
     };
 
+    this.overlay();
     this.cloneMenu();
-    this.toggleMenu();
-    this.outsideMenu();
+    this.openMenu();
+    this.closeMenu();
     this.debug();
   },
 
@@ -27,41 +28,48 @@ var r_burgerMenuGlobal = {
     console.log('Hello !');
   },
 
-  toggleMenu: function () {
-    [].forEach.call(document.querySelectorAll(this.config._buttonMenu), function(el) {
+  closeMenu: function (e) {
+    window.addEventListener('click', removeMenu);
+
+    function removeMenu (e) {
+      if (!document.getElementById('cloned-menu').contains(e.target)){
+        alert('oui');
+        document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).classList.remove(r_burgerMenuGlobal.config.CSS.classes.opened);
+        document.body.classList.remove(r_burgerMenuGlobal.config.CSS.classes.opened);
+      }
+    }
+  },
+
+  overlay: function() {
+    var overlay = document.createElement('div');
+    overlay.className = r_burgerMenuGlobal.config.CSS.classes.btOverlay;
+    document.body.appendChild( overlay );
+  },
+
+  openMenu: function () {
+    [].forEach.call(document.querySelectorAll(this.config._buttonBurgerMenu), function(el) {
       el.addEventListener('click', clickOpenMenu);
     });
 
-    function clickOpenMenu () {
+    function clickOpenMenu (e) {
+      e.stopPropagation();
+      e.preventDefault();
+
+      if ( document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).classList.contains(r_burgerMenuGlobal.config.CSS.classes.opened) ) {
         [].map.call(document.querySelectorAll(r_burgerMenuGlobal.config._contentMenuCloned), function(element) {
-            element.classList.toggle(r_burgerMenuGlobal.config.CSS.classes.opened);
-
-            r_burgerMenuGlobal.config.isOpen = true;
+          element.classList.remove(r_burgerMenuGlobal.config.CSS.classes.opened);
         });
-    }
 
+        r_burgerMenuGlobal.closeMenu(e);
+      } else {
+        [].map.call(document.querySelectorAll(r_burgerMenuGlobal.config._contentMenuCloned), function(element) {
+          element.classList.add(r_burgerMenuGlobal.config.CSS.classes.opened);
+        });
 
-  },
-
-  outsideMenu: function () {
-/*    window.addEventListener('click', function(e){
-      if (!document.getElementById('cloned-menu').contains(e.target)){
-        if (document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).classList.contains(r_burgerMenuGlobal.config.CSS.classes.active)) {
-          alert("Clicked out Box");
-          document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).classList.remove(r_burgerMenuGlobal.config.CSS.classes.opened);
-        }
+        document.body.classList.add(r_burgerMenuGlobal.config.CSS.classes.opened);
       }
-    });*/
-
-      window.addEventListener( 'click', function(ev) {
-          var target = ev.target;
-
-          if( r_burgerMenuGlobal.config.isOpen == true && !document.getElementById('cloned-menu').contains(ev.target)) {
-              alert('hello');
-          }
-      });
+    }
   },
-
 
   cloneMenu: function () {
     var el = document.querySelector(this.config._contentMenu),
