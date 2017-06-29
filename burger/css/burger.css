@@ -21,7 +21,7 @@
 	-webkit-transition: all 1s cubic-bezier(0.75, 0.05, 0.2, 1);
 	transition: all 1s cubic-bezier(0.75, 0.05, 0.2, 1);
 }
-	.r_cloned-navigation.active {
+	.r_cloned-navigation.opened {
 		-webkit-transition: all 0.3s ease-out;
 		transition: all 0.3s ease-out;
 		-webkit-transform: translate(0);
