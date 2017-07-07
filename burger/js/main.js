@@ -28,59 +28,64 @@ var r_burgerMenuGlobal = {
   },
 
   closeOutsideMenu: function () {
+    var self = this;
+
+    var removeMenu = function (element) {
+        if (self.config.openMenuVar && !document.getElementById(self.config.CSS.ids.clonedMenu).contains(element.target)){
+            document.querySelector(self.config._contentMenuCloned).classList.remove(self.config.CSS.classes.opened);
+            document.querySelector(self.config._contentMenuCloned).setAttribute("aria-hidden","true");
+            document.body.classList.remove(self.config.CSS.classes.opened);
+
+            self.config.openMenuVar = false;
+            console.log('Outside Menu '+self.config.openMenuVar);
+        }
+    };
+
     window.addEventListener('click', removeMenu);
-
-    function removeMenu (element) {
-      if (r_burgerMenuGlobal.config.openMenuVar && !document.getElementById(r_burgerMenuGlobal.config.CSS.ids.clonedMenu).contains(element.target)){
-        document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).classList.remove(r_burgerMenuGlobal.config.CSS.classes.opened);
-        document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).setAttribute("aria-hidden","true");
-        document.body.classList.remove(r_burgerMenuGlobal.config.CSS.classes.opened);
-
-        r_burgerMenuGlobal.config.openMenuVar = false;
-        console.log('Outside Menu '+r_burgerMenuGlobal.config.openMenuVar);
-      }
-    }
   },
 
   overlayMenu: function() {
     var overlay = document.createElement('div');
-    overlay.className = r_burgerMenuGlobal.config.CSS.classes.btOverlay;
-    document.body.appendChild( overlay );
+    overlay.className = this.config.CSS.classes.btOverlay;
+    document.body.appendChild(overlay);
   },
 
   toggleMenu: function () {
-    [].forEach.call(document.querySelectorAll(this.config._buttonBurgerMenu), function(el) {
-      el.addEventListener('click', clickToggleMenu);
-    });
 
-    function clickToggleMenu (e) {
+    var self = this;
+
+    var clickToggleMenu = function (e) {
       e.stopPropagation();
       e.preventDefault();
 
       //Close
-      if ( document.querySelector(r_burgerMenuGlobal.config._contentMenuCloned).classList.contains(r_burgerMenuGlobal.config.CSS.classes.opened) ) {
-        [].map.call(document.querySelectorAll(r_burgerMenuGlobal.config._contentMenuCloned), function(element) {
-          element.classList.remove(r_burgerMenuGlobal.config.CSS.classes.opened);
+      if ( document.querySelector(self.config._contentMenuCloned).classList.contains(self.config.CSS.classes.opened) ) {
+        [].map.call(document.querySelectorAll(self.config._contentMenuCloned), function(element) {
+          element.classList.remove(self.config.CSS.classes.opened);
           element.setAttribute("aria-hidden","true");
-          document.body.classList.remove(r_burgerMenuGlobal.config.CSS.classes.opened);
+          document.body.classList.remove(self.config.CSS.classes.opened);
         });
 
-        console.log('Closed Menu '+r_burgerMenuGlobal.config.openMenuVar);
-        r_burgerMenuGlobal.config.openMenuVar = false;
+        //console.log('Closed Menu '+self.config.openMenuVar);
+        self.config.openMenuVar = false;
 
       } else {
         //Open
-        [].map.call(document.querySelectorAll(r_burgerMenuGlobal.config._contentMenuCloned), function(element) {
-          element.classList.add(r_burgerMenuGlobal.config.CSS.classes.opened);
+        [].map.call(document.querySelectorAll(self.config._contentMenuCloned), function(element) {
+          element.classList.add(self.config.CSS.classes.opened);
           element.setAttribute("aria-hidden","false");
-          document.body.classList.add(r_burgerMenuGlobal.config.CSS.classes.opened);
-          console.log('Opened Menu '+r_burgerMenuGlobal.config.openMenuVar);
+          document.body.classList.add(self.config.CSS.classes.opened);
+          //console.log('Opened Menu '+self.config.openMenuVar);
         });
 
-        r_burgerMenuGlobal.config.openMenuVar = true;
-        r_burgerMenuGlobal.closeOutsideMenu();
+        self.config.openMenuVar = true;
+        self.closeOutsideMenu();
       }
-    }
+    };
+
+    [].forEach.call(document.querySelectorAll(this.config._buttonBurgerMenu), function(el) {
+        el.addEventListener('click', clickToggleMenu);
+    });
   },
 
   cloneMenu: function () {
@@ -92,14 +97,12 @@ var r_burgerMenuGlobal = {
   }
 };
 
-;(function(window) {
+;(function() {
 
     'use strict';
     r_burgerMenuGlobal.init();
 
-})(window);
-
-
+})();
 
 
 
