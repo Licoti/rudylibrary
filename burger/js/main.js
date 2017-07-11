@@ -27,18 +27,25 @@ var r_burgerMenuGlobal = {
     console.log('Hello !');
   },
 
+  closeMenu: function () {
+    var self = this;
+
+    document.querySelector(self.config._contentMenuCloned).classList.remove(self.config.CSS.classes.opened);
+    document.body.classList.remove(self.config.CSS.classes.opened);
+    document.querySelector(self.config._contentMenuCloned).setAttribute("aria-hidden","true");
+
+    self.config.openMenuVar = false;
+    console.log('Closed Menu '+self.config.openMenuVar);
+  },
+
   closeOutsideMenu: function () {
     var self = this;
 
     var removeMenu = function (element) {
-        if (self.config.openMenuVar && !document.getElementById(self.config.CSS.ids.clonedMenu).contains(element.target)){
-            document.querySelector(self.config._contentMenuCloned).classList.remove(self.config.CSS.classes.opened);
-            document.querySelector(self.config._contentMenuCloned).setAttribute("aria-hidden","true");
-            document.body.classList.remove(self.config.CSS.classes.opened);
-
-            self.config.openMenuVar = false;
-            console.log('Outside Menu '+self.config.openMenuVar);
-        }
+      if (self.config.openMenuVar && !document.getElementById(self.config.CSS.ids.clonedMenu).contains(element.target)){
+        self.closeMenu();
+        console.log('Outside Menu '+self.config.openMenuVar);
+      }
     };
 
     window.addEventListener('click', removeMenu);
@@ -61,21 +68,17 @@ var r_burgerMenuGlobal = {
       //Close
       if ( document.querySelector(self.config._contentMenuCloned).classList.contains(self.config.CSS.classes.opened) ) {
         [].map.call(document.querySelectorAll(self.config._contentMenuCloned), function(element) {
-          element.classList.remove(self.config.CSS.classes.opened);
-          element.setAttribute("aria-hidden","true");
-          document.body.classList.remove(self.config.CSS.classes.opened);
+          self.closeMenu();
         });
 
-        //console.log('Closed Menu '+self.config.openMenuVar);
-        self.config.openMenuVar = false;
-
+        console.log('On Closed Menu '+self.config.openMenuVar);
       } else {
         //Open
         [].map.call(document.querySelectorAll(self.config._contentMenuCloned), function(element) {
           element.classList.add(self.config.CSS.classes.opened);
           element.setAttribute("aria-hidden","false");
           document.body.classList.add(self.config.CSS.classes.opened);
-          //console.log('Opened Menu '+self.config.openMenuVar);
+          console.log('Opened Menu '+self.config.openMenuVar);
         });
 
         self.config.openMenuVar = true;
@@ -100,7 +103,10 @@ var r_burgerMenuGlobal = {
 ;(function() {
 
     'use strict';
-    r_burgerMenuGlobal.init();
+
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      r_burgerMenuGlobal.init();
+    }
 
 })();
 
