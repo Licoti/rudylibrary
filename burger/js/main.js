@@ -1,3 +1,8 @@
+/**
+ * @Todo :
+ * - resize event
+ * - add class to display animated cross on opened
+ */
 var r_burgerMenuGlobal = {
   init: function () {
 
@@ -14,20 +19,22 @@ var r_burgerMenuGlobal = {
       _buttonBurgerMenu: '.r_navigation__title--burger', //Button Action
       _contentMenu: '.r_main-navigation', //Navigation Container
       _contentMenuCloned: '.r_cloned-navigation', //Empty div to clone Navigation container
-      openMenuVar: false
+      openMenuVar: false,
+        ivar: false
     };
 
-    this.overlayMenu();
-    this.cloneMenu();
-    this.toggleMenu();
-    this.debug();
+    this.OverlayMenu();
+    this.CloneMenu();
+    this.ToggleMenu();
+    this.Debug();
+    this.CloseOnResizeEvent();
   },
 
-  debug: function () {
+  Debug: function () {
     console.log('Hello !');
   },
 
-  closeMenu: function () {
+  CloseMenu: function () {
     var self = this;
 
     document.querySelector(self.config._contentMenuCloned).classList.remove(self.config.CSS.classes.opened);
@@ -43,7 +50,7 @@ var r_burgerMenuGlobal = {
 
     var removeMenu = function (element) {
       if (self.config.openMenuVar && !document.getElementById(self.config.CSS.ids.clonedMenu).contains(element.target)){
-        self.closeMenu();
+        self.CloseMenu();
         console.log('Outside Menu '+self.config.openMenuVar);
       }
     };
@@ -51,14 +58,13 @@ var r_burgerMenuGlobal = {
     window.addEventListener('click', removeMenu);
   },
 
-  overlayMenu: function() {
+  OverlayMenu: function() {
     var overlay = document.createElement('div');
     overlay.className = this.config.CSS.classes.btOverlay;
     document.body.appendChild(overlay);
   },
 
-  toggleMenu: function () {
-
+  ToggleMenu: function () {
     var self = this;
 
     var clickToggleMenu = function (e) {
@@ -68,7 +74,7 @@ var r_burgerMenuGlobal = {
       //Close
       if ( document.querySelector(self.config._contentMenuCloned).classList.contains(self.config.CSS.classes.opened) ) {
         [].map.call(document.querySelectorAll(self.config._contentMenuCloned), function(element) {
-          self.closeMenu();
+          self.CloseMenu();
         });
 
         console.log('On Closed Menu '+self.config.openMenuVar);
@@ -91,22 +97,38 @@ var r_burgerMenuGlobal = {
     });
   },
 
-  cloneMenu: function () {
+  CloneMenu: function () {
     var el = document.querySelector(this.config._contentMenu),
       clonedElement = el.cloneNode(true);
     if (document.querySelector(this.config._contentMenuCloned)) {
       document.querySelector(this.config._contentMenuCloned).appendChild(clonedElement);
     }
+  },
+
+  CloseOnResizeEvent: function () {
+    var resizeTimer;
+    var self = this;
+
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {
+
+        if (window.matchMedia("(min-width: 768px)").matches) {
+          if ( self.config.openMenuVar ) {
+            self.CloseMenu();
+          }
+        }
+
+      }, 250);
+    });
   }
 };
 
 ;(function() {
 
-    'use strict';
+  'use strict';
 
-    if (window.matchMedia("(max-width: 768px)").matches) {
-      r_burgerMenuGlobal.init();
-    }
+  r_burgerMenuGlobal.init();
 
 })();
 

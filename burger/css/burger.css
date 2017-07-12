@@ -1,17 +1,28 @@
 .debug {border: 1px solid red}
 
+/* Show / hide */
+.r_navigation__title--burger, .r_navigation--header {
+	display: block;
+}
+main .r_main-navigation {
+	display: none;
+}
+
 .r_cloned-navigation {
+	/* Configure width*/
 	width: 50%;
 	height: 100%;
 	max-width: 500px;
+
+	/* Configure Colors */
+	background-color: #191919;
+	color: #fff;
 
 	position: fixed;
 	top: 0;
 	left: 0;
 	bottom: 0;
-	color: #fff;
 	box-sizing: border-box;
-	background-color: #191919;
 	overflow-y: auto;
 	overflow-x: hidden;
 	z-index: 5556;
@@ -60,7 +71,12 @@
 		transform: translate(0%);
 	}
 
-/*pour les tests, non visible en mobile */
-main .r_main-navigation {
-	display: none;
+/* Desktop */
+@media (min-width: 768px) {
+	.r_navigation__title--burger, .r_navigation--header {
+		display: none;
+	}
+	main .r_main-navigation {
+		display: block;
+	}
 }
